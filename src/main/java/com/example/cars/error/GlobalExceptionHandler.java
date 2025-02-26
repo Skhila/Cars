@@ -24,4 +24,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDTO> handleNotFoundException(NotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO("not-found", exception.getMessage()));
     }
+
+    @ExceptionHandler(InvalidLoginException.class)
+    public ResponseEntity<ErrorDTO> handleInvalidLoginException(InvalidLoginException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorDTO("invalid-login", exception.getMessage()));
+    }
 }

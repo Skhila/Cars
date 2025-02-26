@@ -7,3 +7,6 @@ spring:
   liquibase:
     change-log: db/changelog/db.changelog-master.yaml
     default-schema: cars
+
+jwt:
+  secret-key: ${JAVA_COURSE_JWT_KEY}
