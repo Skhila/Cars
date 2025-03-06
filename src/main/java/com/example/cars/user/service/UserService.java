@@ -25,6 +25,8 @@ public class UserService {
         appUser.setRoles(userRequest.getRoleIds().stream()
                 .map(roleService::getRole)
                 .collect(Collectors.toSet()));
+
+        appUserRepository.save(appUser);
     }
 
     public AppUser getUser(String username) {
