@@ -7,11 +7,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,12 +24,14 @@ import java.util.stream.Collectors;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+
     @Value("${jwt.secret-key}")
     private String secretKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException{
+            throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -37,18 +40,18 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        try{
+        try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new MACVerifier(secretKey.getBytes());
 
-            if (!signedJWT.verify(verifier)){
+            if (!signedJWT.verify(verifier)) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
             Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-            if (expirationTime == null || expirationTime.before(new Date())){
-                System.out.println("JWT is expired");
+            if (expirationTime == null || expirationTime.before(new Date())) {
+                logger.error("JWT token expired");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -63,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         } catch (Exception e) {
-            System.out.println("Error during JWT extraction");
+            logger.error("Error during JWT extraction");
         }
 
         filterChain.doFilter(request, response);

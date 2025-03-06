@@ -6,9 +6,10 @@ CREATE TABLE cars.role
 
 CREATE TABLE cars.app_user
 (
-    ID       BIGINT              NOT NULL PRIMARY KEY,
-    USERNAME VARCHAR(100) UNIQUE NOT NULL,
-    PASSWORD VARCHAR             NOT NULL
+    ID               BIGINT              NOT NULL PRIMARY KEY,
+    USERNAME         VARCHAR(100) UNIQUE NOT NULL,
+    PASSWORD         VARCHAR             NOT NULL,
+    BALANCE_IN_CENTS BIGINT              NOT NULL
 );
 
 CREATE TABLE cars.user_role
@@ -20,6 +21,6 @@ CREATE TABLE cars.user_role
     FOREIGN KEY (ROLE_ID) REFERENCES ROLE (ID)
 );
 
-CREATE SEQUENCE cars.user_seq
+CREATE SEQUENCE IF NOT EXISTS cars.user_seq
     INCREMENT 1
    START 1000;
