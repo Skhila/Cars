@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/scripts/02-CREATE-USERS-AND-ROLES.sql
   - include:
       file: db/changelog/scripts/03-ADD-ROLES.sql
+  - include:
+      file: db/changelog/scripts/04-CREATE-USER-CARS.sql

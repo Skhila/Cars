@@ -28,7 +28,7 @@ public class CarsController {
 
     @GetMapping("{id}")
     @PreAuthorize(USER_OR_ADMIN)
-    CarDTO getCarById(@PathVariable long id) {
+    CarDTO getCarById(@PathVariable Long id) {
         return carsService.findCar(id);
     }
 
@@ -41,13 +41,13 @@ public class CarsController {
 
     @PutMapping("{id}")
     @PreAuthorize(ADMIN)
-    void updateCar(@PathVariable long id, @RequestBody @Valid CarRequest request) {
+    void updateCar(@PathVariable Long id, @RequestBody @Valid CarRequest request) {
         carsService.updateCar(id, request);
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize(ADMIN)
-    void deleteCar(@PathVariable long id) {
+    void deleteCar(@PathVariable Long id) {
         carsService.deleteCar(id);
     }
 }

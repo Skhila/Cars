@@ -14,7 +14,7 @@ public class Car {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(generator = "engine_seq_gen", strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
 
     @Column(name = "model")
     private String model;
@@ -24,6 +24,9 @@ public class Car {
 
     @Column(name = "is_driveable")
     private boolean isDriveable;
+
+    @Column(name = "price_in_cents")
+    private Long priceInCents;
 
     @ManyToOne
     @JoinColumn(name = "engine_id")

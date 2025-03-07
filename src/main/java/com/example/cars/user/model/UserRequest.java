@@ -2,6 +2,7 @@ package com.example.cars.user.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class UserRequest {
     @NotBlank
     @Size(min = 8)
     private String password;
+
+    @Positive
+    private Long balanceInCents;
 
     @NotEmpty
     private Set<Long> roleIds;

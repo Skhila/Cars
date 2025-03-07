@@ -1,18 +1,18 @@
-CREATE TABLE cars.role
+CREATE TABLE IF NOT EXISTS cars.role
 (
     ID   BIGINT             NOT NULL PRIMARY KEY,
     NAME VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE cars.app_user
+CREATE TABLE IF NOT EXISTS cars.app_user
 (
     ID               BIGINT              NOT NULL PRIMARY KEY,
     USERNAME         VARCHAR(100) UNIQUE NOT NULL,
     PASSWORD         VARCHAR             NOT NULL,
-    BALANCE_IN_CENTS BIGINT              NOT NULL
+    BALANCE_IN_CENTS BIGINT
 );
 
-CREATE TABLE cars.user_role
+CREATE TABLE IF NOT EXISTS cars.user_role
 (
     USER_ID BIGINT NOT NULL,
     ROLE_ID BIGINT NOT NULL,

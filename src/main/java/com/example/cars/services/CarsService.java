@@ -27,16 +27,18 @@ public class CarsService {
         car.setModel(request.getModel());
         car.setYear(request.getYear());
         car.setDriveable(request.isDriveable());
+        car.setPriceInCents(request.getPriceInCents());
         car.setEngine(engineService.findEngineById(request.getEngineId()));
 
         carRepository.save(car);
     }
 
-    public void updateCar(long id, CarRequest request) {
+    public void updateCar(Long id, CarRequest request) {
         Car car = carRepository.findById(id).orElseThrow(() ->  buildNotFoundException(id));
         car.setModel(request.getModel());
         car.setYear(request.getYear());
         car.setDriveable(request.isDriveable());
+        car.setPriceInCents(request.getPriceInCents());
 
         if (car.getEngine().getId() != request.getEngineId()) {
             car.setEngine(engineService.findEngineById(request.getEngineId()));
@@ -45,11 +47,11 @@ public class CarsService {
         carRepository.save(car);
     }
 
-    public void deleteCar(long id) {
+    public void deleteCar(Long id) {
         carRepository.deleteById(id);
     }
 
-    public CarDTO findCar(long id) {
+    public CarDTO findCar(Long id) {
         Car car = carRepository.findById(id).orElseThrow(() ->  buildNotFoundException(id));
 
         return mapCar(car);
@@ -57,7 +59,7 @@ public class CarsService {
 
     private CarDTO mapCar(Car car) {
         return
-                new CarDTO(car.getId(), car.getModel(), car.getYear(), car.isDriveable(),
+                new CarDTO(car.getId(), car.getModel(), car.getYear(), car.isDriveable(), car.getPriceInCents(),
                         new EngineDTO(
                                 car.getEngine().getId(),
                                 car.getEngine().getHorsePower(),

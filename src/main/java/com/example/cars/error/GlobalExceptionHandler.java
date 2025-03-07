@@ -30,4 +30,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorDTO("invalid-login", exception.getMessage()));
     }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<ErrorDTO> handleInsufficientFundsException(InsufficientFundsException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorDTO("insufficient-funds", exception.getMessage()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> handleAccessDeniedException(AccessDeniedException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorDTO("unauthorized", exception.getMessage()));
+    }
 }

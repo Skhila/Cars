@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 public class EngineDTO {
     @Setter(AccessLevel.NONE)
-    private final long id;
+    private final Long id;
 
     private int horsePower;
     private double capacity;

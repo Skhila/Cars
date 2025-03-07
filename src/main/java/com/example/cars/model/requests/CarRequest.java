@@ -18,6 +18,9 @@ public class CarRequest {
 
     private boolean isDriveable;
 
+    @PositiveOrZero
+    private Long priceInCents;
+
     @Positive
     private Long engineId;
 }
