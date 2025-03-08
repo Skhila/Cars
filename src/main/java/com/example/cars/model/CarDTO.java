@@ -13,4 +13,5 @@ public class CarDTO {
     private boolean driveable;
     private Long priceInCents;
     private EngineDTO engine;
+    private Long salesCount;
 }

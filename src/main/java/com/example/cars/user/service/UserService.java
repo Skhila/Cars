@@ -6,6 +6,7 @@ import com.example.cars.model.CarDTO;
 import com.example.cars.persistence.Car;
 import com.example.cars.persistence.CarRepository;
 import com.example.cars.user.model.AppUserDTO;
+import com.example.cars.user.model.AppUserInfoDTO;
 import com.example.cars.user.model.UserRequest;
 import com.example.cars.user.persistence.AppUser;
 import com.example.cars.user.persistence.AppUserRepository;
@@ -13,9 +14,12 @@ import com.example.cars.user.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +36,29 @@ public class UserService {
 
     public Page<CarDTO> getUserCars(int page, int pageSize, Long userId) {
         return appUserRepository.findUserCars(userId, PageRequest.of(page, pageSize));
+    }
+
+    public Page<AppUserInfoDTO> getAllUsersInfo(int page, int pageSize) {
+        return appUserRepository.getAllUsersInfo(PageRequest.of(page, pageSize));
+    }
+
+    public AppUserDTO getUserInfoById(Long userId) {
+        AppUser user = appUserRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id '" + userId + "' not found"));
+
+        Page<CarDTO> carsPage = appUserRepository.findUserCars(userId, Pageable.unpaged());
+        Set<CarDTO> cars = new HashSet<>(carsPage.getContent());
+
+        return new AppUserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getBalanceInCents(),
+                cars
+        );
+    }
+
+    public Page<CarDTO> getCurrentUserCars(int page, int pageSize) {
+        Long currentUserId = userUtils.getCurrentUser().getId();
+        return appUserRepository.findUserCars(currentUserId, PageRequest.of(page, pageSize));
     }
 
     public void createUser(UserRequest userRequest) {
@@ -58,6 +85,9 @@ public class UserService {
             currentUser.getCars().add(carToAdd);
             currentUser.setBalanceInCents(currentUser.getBalanceInCents() - carToAdd.getPriceInCents());
             appUserRepository.save(currentUser);
+
+            carToAdd.setSalesCount(carToAdd.getSalesCount() + 1);
+            carRepository.save(carToAdd);
         }
     }
 

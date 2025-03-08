@@ -28,6 +28,9 @@ public class Car {
     @Column(name = "price_in_cents")
     private Long priceInCents;
 
+    @Column(name = "sales_count")
+    private Long salesCount = 0L;
+
     @ManyToOne
     @JoinColumn(name = "engine_id")
     private Engine engine;

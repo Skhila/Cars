@@ -64,7 +64,8 @@ public class CarsService {
                                 car.getEngine().getId(),
                                 car.getEngine().getHorsePower(),
                                 car.getEngine().getCapacity()
-                        ));
+                        ),
+                        car.getSalesCount());
     }
 
     private NotFoundException buildNotFoundException(Long id) {

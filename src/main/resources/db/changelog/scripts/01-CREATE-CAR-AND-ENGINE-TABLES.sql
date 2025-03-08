@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS cars.car
     YEAR            INTEGER                NOT NULL,
     IS_DRIVEABLE    BOOLEAN                NOT NULL,
     ENGINE_ID       BIGINT                 NOT NULL REFERENCES cars.engine (ID),
-    PRICE_IN_CENTS  BIGINT                 NOT NULL
+    PRICE_IN_CENTS  BIGINT                 NOT NULL,
+    SALES_COUNT     BIGINT DEFAULT 0       NOT NULL
 );
 
 CREATE SEQUENCE IF NOT EXISTS cars.engine_seq INCREMENT 1 START 1000;
