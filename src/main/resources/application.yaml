@@ -7,6 +7,26 @@ spring:
   liquibase:
     change-log: db/changelog/db.changelog-master.yaml
     default-schema: cars
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      file-size-threshold: 2MB
+      max-request-size: 10MB
 
 jwt:
   secret-key: ${JAVA_COURSE_JWT_KEY}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-access-key: ${S3_SECRET_ACCESS_KEY}
+    region:
+      static: ${S3_REGION}
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: ${S3_BUCKET_NAME}

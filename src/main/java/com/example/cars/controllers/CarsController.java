@@ -3,6 +3,7 @@ package com.example.cars.controllers;
 import com.example.cars.model.CarDTO;
 import com.example.cars.model.requests.CarRequest;
 import com.example.cars.services.CarsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.example.cars.security.AuthorizationConstants.ADMIN;
 import static com.example.cars.security.AuthorizationConstants.USER_OR_ADMIN;
@@ -28,26 +30,39 @@ public class CarsController {
 
     @GetMapping("{id}")
     @PreAuthorize(USER_OR_ADMIN)
-    CarDTO getCarById(@PathVariable long id) {
+    CarDTO getCarById(@PathVariable Long id) {
         return carsService.findCar(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     @PreAuthorize(ADMIN)
     ResponseEntity<CarDTO> addCar(@RequestBody @Valid CarRequest request) {
-        carsService.addCar(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        CarDTO addedCar = carsService.addCar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedCar);
+    }
+
+    @PostMapping("/add/withImage")
+    @PreAuthorize(ADMIN)
+    ResponseEntity<?> addCarWithImage(@RequestPart(value = "image") MultipartFile image,
+                                      @RequestParam("request") String carRequestJson) throws JsonProcessingException {
+        return carsService.addCarWithImage(carRequestJson, image);
     }
 
     @PutMapping("{id}")
     @PreAuthorize(ADMIN)
-    void updateCar(@PathVariable long id, @RequestBody @Valid CarRequest request) {
-        carsService.updateCar(id, request);
+    CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid CarRequest request) {
+        return carsService.updateCar(id, request);
+    }
+
+    @PutMapping("/{id}/updateImage")
+    @PreAuthorize(ADMIN)
+    CarDTO updateCarImage(@PathVariable Long id, @RequestParam(name = "image") MultipartFile image) {
+        return carsService.updateCarImage(id, image);
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize(ADMIN)
-    void deleteCar(@PathVariable long id) {
+    void deleteCar(@PathVariable Long id) {
         carsService.deleteCar(id);
     }
 }

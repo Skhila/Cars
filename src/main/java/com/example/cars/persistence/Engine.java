@@ -14,7 +14,7 @@ public class Engine {
 
     @Id
     @GeneratedValue(generator = "engine_seq_gen", strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
 
     @Column(name = "horse_power")
     private int horsePower;

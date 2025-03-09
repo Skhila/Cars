@@ -42,7 +42,7 @@ public class EngineService {
         engineRepository.deleteById(id);
     }
 
-    public Engine findEngineById(long id) {
+    public Engine findEngineById(Long id) {
         return engineRepository.findById(id).orElseThrow(() ->  buildNotFoundException(id));
     }
 
