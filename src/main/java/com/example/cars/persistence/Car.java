@@ -31,6 +31,9 @@ public class Car {
     @Column(name = "sales_count")
     private Long salesCount = 0L;
 
+    @Column(name = "photo_url")
+    private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "engine_id")
     private Engine engine;

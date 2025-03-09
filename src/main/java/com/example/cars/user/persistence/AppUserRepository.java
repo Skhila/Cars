@@ -17,7 +17,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT NEW com.example.cars.model.CarDTO(" +
             "c.id, c.model, c.year, c.isDriveable, c.priceInCents, " +
             "NEW com.example.cars.model.EngineDTO(e.id, e.horsePower, e.capacity), " +
-            "c.salesCount) " +
+            "c.imageUrl, c.salesCount) " +
             "FROM AppUser u " +
             "JOIN u.cars c " +
             "JOIN c.engine e " +

@@ -33,6 +33,9 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("io.awspring.cloud:spring-cloud-aws-core:3.3.0")
+    implementation("com.amazonaws:aws-java-sdk:1.12.770")
 }
 
 tasks.withType<Test> {
