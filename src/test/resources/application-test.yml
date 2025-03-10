@@ -1,0 +1,67 @@
+# Test Database Configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=true;INIT=CREATE SCHEMA IF NOT EXISTS cars
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        globally_quoted_identifiers: true
+        default_schema: cars
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: never
+  liquibase:
+    enabled: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      file-size-threshold: 2MB
+      max-request-size: 10MB
+
+# Enhanced logging for debugging
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.jdbc: DEBUG
+    org.hibernate.type: TRACE
+
+# Disable API docs during tests
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# JWT Config for testing
+jwt:
+  secret-key: test-jwt-key-for-integration-tests-very-secret-and-secure-key
+
+# AWS S3 Mock Config for tests
+cloud:
+  aws:
+    credentials:
+      access-key: test-access-key
+      secret-access-key: test-secret-key
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: test-bucket

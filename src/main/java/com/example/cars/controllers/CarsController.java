@@ -54,7 +54,13 @@ public class CarsController {
         return carsService.updateCar(id, request);
     }
 
-    @PutMapping("/{id}/updateImage")
+    @PatchMapping("/{id}/updatePriceInCents")
+    @PreAuthorize(ADMIN)
+    CarDTO addCar(@PathVariable Long id, @RequestParam(name = "newPrice") Long priceInCents) {
+        return carsService.updateCarPriceInCents(id, priceInCents);
+    }
+
+    @PatchMapping("/{id}/updateImage")
     @PreAuthorize(ADMIN)
     CarDTO updateCarImage(@PathVariable Long id, @RequestParam(name = "image") MultipartFile image) {
         return carsService.updateCarImage(id, image);

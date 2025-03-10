@@ -42,4 +42,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorDTO("unauthorized", exception.getMessage()));
     }
+
+    @ExceptionHandler(CarAlreadyPurchasedException.class)
+    public ResponseEntity<ErrorDTO> handleCarAlreadyPurchasedException(CarAlreadyPurchasedException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorDTO("car-already-purchased", exception.getMessage()));
+    }
 }

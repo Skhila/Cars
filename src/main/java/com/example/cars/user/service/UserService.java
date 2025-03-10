@@ -1,5 +1,6 @@
 package com.example.cars.user.service;
 
+import com.example.cars.error.CarAlreadyPurchasedException;
 import com.example.cars.error.InsufficientFundsException;
 import com.example.cars.error.NotFoundException;
 import com.example.cars.model.CarDTO;
@@ -81,14 +82,16 @@ public class UserService {
             throw new InsufficientFundsException("Insufficient funds to purchase the car, price: " + carToAdd.getPriceInCents() + "; balance: " + currentUser.getBalanceInCents());
         }
 
-        if (!currentUser.getCars().contains(carToAdd)) {
-            currentUser.getCars().add(carToAdd);
-            currentUser.setBalanceInCents(currentUser.getBalanceInCents() - carToAdd.getPriceInCents());
-            appUserRepository.save(currentUser);
-
-            carToAdd.setSalesCount(carToAdd.getSalesCount() + 1);
-            carRepository.save(carToAdd);
+        if (currentUser.getCars().contains(carToAdd)) {
+            throw new CarAlreadyPurchasedException("User has already purchased the car");
         }
+
+        currentUser.getCars().add(carToAdd);
+        currentUser.setBalanceInCents(currentUser.getBalanceInCents() - carToAdd.getPriceInCents());
+        appUserRepository.save(currentUser);
+
+        carToAdd.setSalesCount(carToAdd.getSalesCount() + 1);
+        carRepository.save(carToAdd);
     }
 
     public void updateBalance(Long userId, Long amountInCents) {

@@ -31,11 +31,14 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("io.awspring.cloud:spring-cloud-aws-core:3.3.0")
     implementation("com.amazonaws:aws-java-sdk:1.12.770")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.h2database:h2")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<Test> {

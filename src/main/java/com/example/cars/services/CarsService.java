@@ -95,7 +95,7 @@ public class CarsService {
         car.setDriveable(request.isDriveable());
         car.setPriceInCents(request.getPriceInCents());
 
-        if (car.getEngine().getId() != request.getEngineId()) {
+        if (!Objects.equals(car.getEngine().getId(), request.getEngineId())) {
             car.setEngine(engineService.findEngineById(request.getEngineId()));
         }
 
@@ -111,6 +111,17 @@ public class CarsService {
 
         if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
             storageService.deleteImage(oldImageUrl);
+        }
+
+        carRepository.save(car);
+        return mapCar(car);
+    }
+
+    public CarDTO updateCarPriceInCents(Long id, Long newPriceInCents) {
+        Car car = carRepository.findById(id).orElseThrow(() -> buildNotFoundException(id));
+
+        if (!Objects.equals(car.getPriceInCents(), newPriceInCents)) {
+            car.setPriceInCents(newPriceInCents);
         }
 
         carRepository.save(car);
