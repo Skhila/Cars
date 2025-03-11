@@ -1,5 +1,6 @@
 package cars.unit;
 
+import com.example.cars.error.CarAlreadyPurchasedException;
 import com.example.cars.error.InsufficientFundsException;
 import com.example.cars.error.NotFoundException;
 import com.example.cars.persistence.Car;
@@ -7,7 +8,6 @@ import com.example.cars.persistence.CarRepository;
 import com.example.cars.persistence.Engine;
 import com.example.cars.user.persistence.AppUser;
 import com.example.cars.user.persistence.AppUserRepository;
-import com.example.cars.user.service.RoleService;
 import com.example.cars.user.service.UserService;
 import com.example.cars.user.utils.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -35,12 +34,6 @@ public class UsersServiceUnitTest {
 
     @Mock
     private AppUserRepository appUserRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private RoleService roleService;
 
     @InjectMocks
     private UserService userService;
@@ -137,8 +130,9 @@ public class UsersServiceUnitTest {
         long initialBalance = testUser.getBalanceInCents();
         long initialSalesCount = testCar.getSalesCount();
 
-        // When
-        userService.purchaseCar(testCar.getId());
+        // When & part of Then
+        assertThrows(CarAlreadyPurchasedException.class, () -> userService.purchaseCar(testCar.getId()),
+                "Should throw CarAlreadyPurchasedException when user already owns the car");
 
         // Then
         assertEquals(1, testUser.getCars().size(), "User's car collection size should remain the same");
