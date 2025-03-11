@@ -36,10 +36,10 @@ public class SecurityConfig {
 
                 .exceptionHandling(handling -> handling
                         .accessDeniedHandler((request, response, ex) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                            ErrorDTO error = new ErrorDTO("unauthorized", ex.getMessage());
+                            ErrorDTO error = new ErrorDTO("forbidden", ex.getMessage());
                             response.getWriter().write(new ObjectMapper().writeValueAsString(error));
                         })
                         .authenticationEntryPoint((request, response, ex) -> {
