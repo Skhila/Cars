@@ -329,8 +329,8 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    public void testAccessUnauthenticated() throws Exception {
+    public void testAccessUnauthorized() throws Exception {
         mockMvc.perform(get("/users/myCars"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
