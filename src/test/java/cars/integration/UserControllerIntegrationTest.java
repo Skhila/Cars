@@ -30,8 +30,7 @@ import java.util.Set;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -186,7 +185,7 @@ public class UserControllerIntegrationTest {
     @Test
     @WithMockUser(username = "testadmin", roles = "ADMIN")
     void testUpdateBalance() throws Exception {
-        mockMvc.perform(post("/users/{userId}/updateBalance", testUser.getId())
+        mockMvc.perform(patch("/users/{userId}/addFundsToBalance", testUser.getId())
                         .with(csrf())
                         .param("amountInCents", "5000"))
                 .andExpect(status().isOk());
@@ -199,7 +198,7 @@ public class UserControllerIntegrationTest {
     @Test
     @WithMockUser(username = "testadmin", roles = "ADMIN")
     void testUpdateBalanceWithInsufficientFunds() throws Exception {
-        mockMvc.perform(post("/users/{userId}/updateBalance", testUser.getId())
+        mockMvc.perform(patch("/users/{userId}/addFundsToBalance", testUser.getId())
                         .with(csrf())
                         .param("amountInCents", "-20000"))
                 .andExpect(status().isConflict())

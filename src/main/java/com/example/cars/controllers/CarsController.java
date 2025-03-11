@@ -5,11 +5,15 @@ import com.example.cars.model.requests.CarRequest;
 import com.example.cars.services.CarsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ import static com.example.cars.security.AuthorizationConstants.USER_OR_ADMIN;
 @RestController
 @RequestMapping("/cars")
 @RequiredArgsConstructor
+@Validated
 public class CarsController {
     private final CarsService carsService;
 
@@ -44,7 +49,7 @@ public class CarsController {
     @PostMapping("/add/withImage")
     @PreAuthorize(ADMIN)
     ResponseEntity<?> addCarWithImage(@RequestPart(value = "image") MultipartFile image,
-                                      @RequestParam("request") String carRequestJson) throws JsonProcessingException {
+                                      @RequestParam("request") String carRequestJson) {
         return carsService.addCarWithImage(carRequestJson, image);
     }
 
@@ -56,7 +61,8 @@ public class CarsController {
 
     @PatchMapping("/{id}/updatePriceInCents")
     @PreAuthorize(ADMIN)
-    CarDTO addCar(@PathVariable Long id, @RequestParam(name = "newPrice") Long priceInCents) {
+    CarDTO updateCarPriceInCents(@PathVariable Long id,
+                                 @RequestParam(name = "newPrice") @PositiveOrZero(message = "Price must be positive") Long priceInCents) {
         return carsService.updateCarPriceInCents(id, priceInCents);
     }
 

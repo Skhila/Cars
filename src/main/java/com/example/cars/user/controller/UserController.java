@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PreAuthorize(ADMIN)
-    @PostMapping("/{userId}/updateBalance")
+    @PatchMapping("/{userId}/addFundsToBalance")
     public void updateBalance(@PathVariable Long userId, @RequestParam Long amountInCents) {
         userService.updateBalance(userId, amountInCents);
     }
