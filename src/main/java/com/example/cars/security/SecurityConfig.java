@@ -1,8 +1,12 @@
 package com.example.cars.security;
 
+import com.example.cars.error.ErrorDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,9 +30,27 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-                        .requestMatchers("/auth/login").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                                .requestMatchers("/auth/login").permitAll()
+                                .anyRequest().authenticated())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(handling -> handling
+                        .accessDeniedHandler((request, response, ex) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+                            ErrorDTO error = new ErrorDTO("unauthorized", ex.getMessage());
+                            response.getWriter().write(new ObjectMapper().writeValueAsString(error));
+                        })
+                        .authenticationEntryPoint((request, response, ex) -> {
+                            // For unauthenticated users
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+                            ErrorDTO error = new ErrorDTO("unauthorized", "Authentication required");
+                            response.getWriter().write(new ObjectMapper().writeValueAsString(error));
+                        })
+                );
 
         return http.build();
     }

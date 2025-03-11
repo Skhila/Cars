@@ -5,12 +5,14 @@ import com.example.cars.error.NotFoundException;
 import com.example.cars.user.persistence.AppUser;
 import com.example.cars.user.persistence.AppUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserUtils {
     private final AppUserRepository appUserRepository;
 

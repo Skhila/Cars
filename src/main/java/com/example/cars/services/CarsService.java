@@ -48,15 +48,8 @@ public class CarsService {
                     .body(new ErrorDTO("Incorrect JSON body provided", e.getMessage()));
         }
 
-        // Manual validation
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<CarRequest>> violations = validator.validate(request);
-
-        if (!violations.isEmpty()) {
-            List<ErrorDTO> errors = new ArrayList<>();
-            for (ConstraintViolation<CarRequest> violation : violations) {
-                errors.add(new ErrorDTO(violation.getPropertyPath().toString(), violation.getMessage()));
-            }
+        List<ErrorDTO> errors = validateRequest(request);
+        if(errors != null && !errors.isEmpty()) {
             return ResponseEntity.badRequest().body(errors);
         }
 
@@ -152,5 +145,21 @@ public class CarsService {
 
     private NotFoundException buildNotFoundException(Long id) {
         return new NotFoundException("Car with id " + id + " not found");
+    }
+
+    private List<ErrorDTO> validateRequest(CarRequest request) {
+        // Manual validation
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<CarRequest>> violations = validator.validate(request);
+
+        if (!violations.isEmpty()) {
+            List<ErrorDTO> errors = new ArrayList<>();
+            for (ConstraintViolation<CarRequest> violation : violations) {
+                errors.add(new ErrorDTO(violation.getPropertyPath().toString(), violation.getMessage()));
+            }
+            return errors;
+        }
+
+        return null;
     }
 }
